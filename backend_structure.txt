@@ -1,0 +1,73 @@
+Folder PATH listing for volume FSOS
+Volume serial number is 40AE-589D
+C:.
+¦   .gitattributes
+¦   .gitignore
+¦   backend_structure.txt
+¦   mvnw
+¦   mvnw.cmd
+¦   pom.xml
+¦   
++---.idea
+¦       .gitignore
+¦       workspace.xml
+¦       
++---.mvn
+¦   +---wrapper
+¦           maven-wrapper.properties
+¦           
++---migration
+¦       V1__.sql
+¦       
++---src
+    +---main
+    ¦   +---java
+    ¦   ¦   +---com
+    ¦   ¦       +---JFBRA
+    ¦   ¦           ¦   JobFairBootRezervationApplication.java
+    ¦   ¦           ¦   
+    ¦   ¦           +---config
+    ¦   ¦           ¦       WebConfig.java
+    ¦   ¦           ¦       
+    ¦   ¦           +---controller
+    ¦   ¦           ¦       BoothController.java
+    ¦   ¦           ¦       ReservationController.java
+    ¦   ¦           ¦       ServiceController.java
+    ¦   ¦           ¦       
+    ¦   ¦           +---dto
+    ¦   ¦           ¦       BoothDto.java
+    ¦   ¦           ¦       ReservationDto.java
+    ¦   ¦           ¦       ServiceDto.java
+    ¦   ¦           ¦       
+    ¦   ¦           +---model
+    ¦   ¦           ¦       AdditionalService.java
+    ¦   ¦           ¦       Booth.java
+    ¦   ¦           ¦       Reservation.java
+    ¦   ¦           ¦       User.java
+    ¦   ¦           ¦       
+    ¦   ¦           +---repository
+    ¦   ¦           ¦       BoothRepository.java
+    ¦   ¦           ¦       ReservationRepository.java
+    ¦   ¦           ¦       ServiceRepository.java
+    ¦   ¦           ¦       UserRepository.java
+    ¦   ¦           ¦       
+    ¦   ¦           +---service
+    ¦   ¦                   BoothService.java
+    ¦   ¦                   ReservationService.java
+    ¦   ¦                   ServiceService.java
+    ¦   ¦                   
+    ¦   +---resources
+    ¦       ¦   application.properties
+    ¦       ¦   
+    ¦       +---db
+    ¦           +---migration
+    ¦                    V1__Create_initial_tables.sql
+    ¦                   V2__Create__initial__tables.sql
+    ¦                   V4__update_booth_size.sql
+    ¦                   
+    +---test
+        +---java
+            +---com
+                +---JFBRA
+                        JobFairBootRezervationApplicationTests.java
+                        
