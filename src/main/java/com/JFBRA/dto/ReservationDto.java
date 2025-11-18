@@ -49,6 +49,7 @@ public class ReservationDto {
     @NotNull(message = "Dane do faktury są wymagane")
     private InvoiceAddressDto invoiceAddress;
 
+    @Builder.Default
     private List<String> services = new ArrayList<>();
 
     @NotNull(message = "Zgoda na przetwarzanie danych jest wymagana")

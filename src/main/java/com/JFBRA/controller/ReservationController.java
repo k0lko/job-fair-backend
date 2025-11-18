@@ -7,7 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -41,5 +41,15 @@ public class ReservationController {
             return ResponseEntity.ok(reservation);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<Reservation>> getMyReservations(Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(401).build();
+        }
+        String email = principal.getName();
+        List<Reservation> reservations = reservationService.getReservationsByEmail(email);
+        return ResponseEntity.ok(reservations);
     }
 }
