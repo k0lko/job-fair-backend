@@ -1,5 +1,6 @@
 package com.JFBRA.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -23,7 +24,8 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Generate token
+    // ================= TOKEN GENERATION =================
+
     public String generateToken(String email, String role) {
         long now = System.currentTimeMillis();
 
@@ -36,36 +38,34 @@ public class JwtUtils {
                 .compact();
     }
 
-    // Validate token
+    // ================= TOKEN VALIDATION =================
+
     public boolean validateToken(String jwt) {
         try {
-            Jwts.parser()
-                    .verifyWith(getSigningKey())
-                    .build()
-                    .parseSignedClaims(jwt);
+            parseClaims(jwt);
             return true;
-        } catch (Exception e) {
+        } catch (Exception ex) {
             return false;
         }
     }
 
-    // Extract email
+    // ================= CLAIMS EXTRACTION =================
+
     public String getEmailFromToken(String jwt) {
+        return parseClaims(jwt).getSubject();
+    }
+
+    public String getRoleFromToken(String jwt) {
+        return parseClaims(jwt).get("role", String.class);
+    }
+
+    // ================= INTERNAL =================
+
+    private Claims parseClaims(String jwt) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(jwt)
-                .getPayload()
-                .getSubject();
-    }
-
-    // Extract role
-    public String getRoleFromToken(String jwt) {
-        return (String) Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(jwt)
-                .getPayload()
-                .get("role");
+                .getPayload();
     }
 }

@@ -3,12 +3,13 @@ package com.JFBRA.security;
 import com.JFBRA.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.util.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -19,9 +20,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
     private final CustomUserDetailsService userDetailsService;
 
-    public JwtAuthenticationFilter(JwtUtils jwtUtils, CustomUserDetailsService userDetailsService) {
+    public JwtAuthenticationFilter(
+            JwtUtils jwtUtils,
+            CustomUserDetailsService userDetailsService
+    ) {
         this.jwtUtils = jwtUtils;
         this.userDetailsService = userDetailsService;
+    }
+
+    // pomijamy publiczne endpointy i OPTIONS
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.startsWith("/api/auth/")
+                || path.equals("/error")
+                || "OPTIONS".equalsIgnoreCase(request.getMethod());
     }
 
     private String parseJwt(HttpServletRequest request) {
@@ -33,26 +46,41 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
+
         try {
             String jwt = parseJwt(request);
+
             if (jwt != null && jwtUtils.validateToken(jwt)) {
                 String email = jwtUtils.getEmailFromToken(jwt);
-                var userDetails = userDetailsService.loadUserByUsername(email);
 
-                var auth = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
+                var userDetails =
+                        userDetailsService.loadUserByUsername(email);
+
+                var authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
+
+                authentication.setDetails(
+                        new WebAuthenticationDetailsSource()
+                                .buildDetails(request)
                 );
-                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(auth);
+
+                SecurityContextHolder
+                        .getContext()
+                        .setAuthentication(authentication);
             }
         } catch (Exception ex) {
-            // optionally log
+            // opcjonalnie: log.warn("JWT error", ex);
         }
+
         filterChain.doFilter(request, response);
     }
 }

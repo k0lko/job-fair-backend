@@ -13,5 +13,7 @@ public interface ServiceRepository extends JpaRepository<AdditionalService, Long
 
     AdditionalService findByServiceCode(String serviceCode);
 
+    List<AdditionalService> findByServiceCodeIn(List<String> serviceCodes);
+
     boolean existsByServiceCode(String serviceCode);
 }

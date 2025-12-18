@@ -1,15 +1,16 @@
 package com.JFBRA.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
 @Entity
 @Table(name = "reservations")
@@ -23,6 +24,7 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booth_id", nullable = false)
     private Booth booth;
@@ -54,6 +56,7 @@ public class Reservation {
     })
     private InvoiceAddress invoiceAddress;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "reservation_services",
@@ -77,7 +80,6 @@ public class Reservation {
     @Column(nullable = false)
     private Boolean agreedToConditions;
 
-    // ✅ Zaktualizowany model InvoiceAddress
     @Embeddable
     @Data
     @Builder

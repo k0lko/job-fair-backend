@@ -4,35 +4,34 @@ import com.JFBRA.dto.ServiceDto;
 import com.JFBRA.model.AdditionalService;
 import com.JFBRA.repository.ServiceRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@org.springframework.stereotype.Service
 @RequiredArgsConstructor
 public class ServiceService {
 
     private final ServiceRepository serviceRepository;
 
     public List<ServiceDto> getAllServices() {
-        List<AdditionalService> services = serviceRepository.findByIsActive(true);
-        return services.stream()
+        List<AdditionalService> additionalServices = serviceRepository.findByIsActive(true);
+        return additionalServices.stream()
                 .map(this::convertToDto)
                 .toList();
     }
 
     public ServiceDto getServiceByCode(String serviceCode) {
-        AdditionalService service = serviceRepository.findByServiceCode(serviceCode);
-        return service != null ? convertToDto(service) : null;
+        AdditionalService additionalService = serviceRepository.findByServiceCode(serviceCode);
+        return additionalService != null ? convertToDto(additionalService) : null;
     }
 
-    private ServiceDto convertToDto(AdditionalService service) {
+    private ServiceDto convertToDto(AdditionalService additionalService) {
         return ServiceDto.builder()
-                .serviceCode(service.getServiceCode())
-                .name(service.getName())
-                .description(service.getDescription())
-                .price(service.getPrice())
-                .vat(service.getVat())
+                .serviceCode(additionalService.getServiceCode())
+                .name(additionalService.getName())
+                .description(additionalService.getDescription())
+                .price(additionalService.getPrice())
+                .vat(additionalService.getVat())
                 .build();
     }
 }

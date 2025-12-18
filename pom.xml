@@ -80,16 +80,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- FLYWAY -->
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-database-postgresql</artifactId>
-        </dependency>
-
         <!-- LOMBOK -->
         <dependency>
             <groupId>org.projectlombok</groupId>

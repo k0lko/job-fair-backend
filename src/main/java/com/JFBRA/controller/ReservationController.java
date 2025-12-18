@@ -52,4 +52,14 @@ public class ReservationController {
         List<Reservation> reservations = reservationService.getReservationsByEmail(email);
         return ResponseEntity.ok(reservations);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> cancelReservation(@PathVariable Long id) {
+        try {
+            reservationService.cancelReservation(id);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
